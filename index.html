@@ -1,269 +1,191 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>로또 번호 추첨기</title>
-  <style>
-    :root {
-      --bg: #121212;
-      --surface: rgba(255, 255, 255, 0.08);
-      --border: rgba(255, 255, 255, 0.14);
-      --accent: #ffca28;
-      --accent-strong: #ffd54f;
-      --text: #f7f7f7;
-      --muted: #cfd8dc;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고려대 맛집 찾기</title>
+    <style>
+        :root {
+            --ku-crimson: #a50034;
+            --light-gray: #f4f4f4;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: #333;
+        }
 
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      font-family: 'Apple SD Gothic Neo', 'Segoe UI', sans-serif;
-      background: radial-gradient(circle at top, rgba(255, 202, 40, 0.14), transparent 24%),
-                  linear-gradient(180deg, #0f1720 0%, #111827 100%);
-      color: var(--text);
-    }
+        header {
+            background-color: var(--ku-crimson);
+            color: var(--white);
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
 
-    .container {
-      width: min(860px, 100%);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      background: rgba(10, 16, 28, 0.92);
-      backdrop-filter: blur(18px);
-      padding: 32px;
-      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
-    }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
 
-    header {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      margin-bottom: 28px;
-    }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
 
-    header h1 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      letter-spacing: -0.04em;
-    }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
 
-    header p {
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.6;
-    }
+        input[type="text"] {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
 
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 18px;
-      margin-bottom: 22px;
-    }
+        button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--ku-crimson);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
 
-    .controls input {
-      width: 100%;
-      padding: 14px 18px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-      font-size: 1rem;
-    }
+        button:hover {
+            opacity: 0.9;
+        }
 
-    .controls button {
-      padding: 14px 22px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #ffca28, #f9a825);
-      color: #111;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+        .restaurant-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
 
-    .controls button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 18px 30px rgba(255, 202, 40, 0.18);
-    }
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
 
-    .result-area {
-      display: grid;
-      gap: 16px;
-    }
+        .card:hover {
+            transform: translateY(-5px);
+        }
 
-    .result-card {
-      padding: 20px 22px;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: var(--surface);
-      display: grid;
-      gap: 16px;
-    }
+        .card-content {
+            padding: 1.5rem;
+        }
 
-    .result-card .meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin: 0 0 0.5rem 0;
+            color: var(--ku-crimson);
+        }
 
-    .numbers {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+        .card-meta {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
 
-    .chip {
-      width: 56px;
-      height: 56px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: #111;
-      background: #f9a825;
-      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
-    }
+        .tag {
+            display: inline-block;
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
 
-    .chip.bonus {
-      background: #82b1ff;
-      color: #0a1220;
-    }
-
-    .no-results {
-      padding: 28px 22px;
-      border-radius: 18px;
-      border: 1px dashed rgba(255, 255, 255, 0.16);
-      text-align: center;
-      color: var(--muted);
-    }
-
-    .footer {
-      margin-top: 26px;
-      color: var(--muted);
-      font-size: 0.94rem;
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    @media (max-width: 620px) {
-      .controls {
-        grid-template-columns: 1fr;
-      }
-
-      .chip {
-        width: 48px;
-        height: 48px;
-      }
-    }
-  </style>
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-  <main class="container">
-    <header>
-      <div>
-        <h1>로또 번호 추첨기</h1>
-        <p>자동으로 6개 로또 번호와 보너스 번호를 뽑아줍니다. 원하는 개수만큼 세트도 생성해 보세요.</p>
-      </div>
-    </header>
 
-    <section class="controls">
-      <input id="setCount" type="number" min="1" max="10" value="1" aria-label="생성할 번호 세트 개수" />
-      <button id="drawButton" type="button">번호 추첨</button>
-    </section>
+<header>
+    <h1>🐯 고려대 맛집 파인더</h1>
+    <p>안암 캠퍼스 주변 최고의 맛집을 찾아보세요</p>
+</header>
 
-    <section class="result-area" id="results">
-      <div class="no-results">추첨 버튼을 눌러 로또 번호를 확인하세요.</div>
-    </section>
-
-    <div class="footer">
-      <span>숫자 범위: 1 ~ 45 / 6개 기본 번호 + 보너스 1개</span>
-      <span>최대 10세트까지 생성 가능합니다.</span>
+<div class="container">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="메뉴나 식당 이름을 입력하세요...">
+        <button onclick="searchRestaurants()">검색</button>
     </div>
-  </main>
 
-  <script>
-    const drawButton = document.getElementById('drawButton');
-    const results = document.getElementById('results');
-    const setCountInput = document.getElementById('setCount');
+    <div class="restaurant-list" id="restaurantList">
+        <!-- 맛집 카드가 여기에 동적으로 추가됩니다 -->
+    </div>
+</div>
 
-    function getLottoNumbers() {
-      const numbers = Array.from({ length: 45 }, (_, i) => i + 1);
-      const shuffled = [];
+<footer>
+    &copy; 2024 Korea University Restaurant Guide
+</footer>
 
-      while (numbers.length) {
-        const randomIndex = Math.floor(Math.random() * numbers.length);
-        shuffled.push(numbers.splice(randomIndex, 1)[0]);
-      }
+<script>
+    const restaurants = [
+        { name: "영철버거", category: "패스트푸드", description: "안암의 전설, 가성비 최고의 스트리트 버거", tags: ["버거", "가성비"] },
+        { name: "고른햇살", category: "분식", description: "참치김밥이 일품인 안암 필수 코스", tags: ["김밥", "라볶이"] },
+        { name: "무르무르드구스토", category: "양식", description: "분위기 좋은 파스타와 리조또 맛집", tags: ["파스타", "데이트"] },
+        { name: "언니네함바그", category: "일식", description: "육즙 가득한 수제 함바그 스테이크", tags: ["함바그", "정식"] },
+        { name: "미뇽", category: "디저트", description: "달콤한 타르트와 커피가 맛있는 카페", tags: ["디저트", "카페"] },
+        { name: "매스플레이트", category: "양식", description: "푸짐한 양의 목살 스테이크와 필라프", tags: ["스테이크", "단체"] }
+    ];
 
-      const mainNumbers = shuffled.slice(0, 6).sort((a, b) => a - b);
-      const bonus = shuffled[6];
-
-      return { mainNumbers, bonus };
+    function displayRestaurants(items) {
+        const list = document.getElementById('restaurantList');
+        list.innerHTML = '';
+        
+        items.forEach(res => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-content">
+                    <h2 class="card-title">${res.name}</h2>
+                    <p class="card-meta">${res.category}</p>
+                    <p>${res.description}</p>
+                    <div>
+                        ${res.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            list.appendChild(card);
+        });
     }
 
-    function renderLottoCard(index, lotto) {
-      const card = document.createElement('article');
-      card.className = 'result-card';
-
-      const meta = document.createElement('div');
-      meta.className = 'meta';
-      meta.innerHTML = `<strong>세트 ${index + 1}</strong><span>추첨 시간: ${new Date().toLocaleTimeString()}</span>`;
-
-      const numbers = document.createElement('div');
-      numbers.className = 'numbers';
-
-      lotto.mainNumbers.forEach(num => {
-        const chip = document.createElement('span');
-        chip.className = 'chip';
-        chip.textContent = num;
-        numbers.appendChild(chip);
-      });
-
-      const bonusChip = document.createElement('span');
-      bonusChip.className = 'chip bonus';
-      bonusChip.textContent = `+ ${lotto.bonus}`;
-      numbers.appendChild(bonusChip);
-
-      card.appendChild(meta);
-      card.appendChild(numbers);
-      return card;
+    function searchRestaurants() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = restaurants.filter(res => 
+            res.name.toLowerCase().includes(query) || 
+            res.category.toLowerCase().includes(query) ||
+            res.tags.some(tag => tag.toLowerCase().includes(query))
+        );
+        displayRestaurants(filtered);
     }
 
-    function drawLotto() {
-      const count = Number(setCountInput.value) || 1;
-      const clampedCount = Math.min(Math.max(count, 1), 10);
-      setCountInput.value = clampedCount;
-      results.innerHTML = '';
+    // 초기 표시
+    displayRestaurants(restaurants);
+</script>
 
-      for (let i = 0; i < clampedCount; i += 1) {
-        const lotto = getLottoNumbers();
-        const card = renderLottoCard(i, lotto);
-        results.appendChild(card);
-      }
-    }
-
-    drawButton.addEventListener('click', drawLotto);
-    setCountInput.addEventListener('keydown', event => {
-      if (event.key === 'Enter') {
-        drawLotto();
-      }
-    });
-  </script>
 </body>
 </html>
