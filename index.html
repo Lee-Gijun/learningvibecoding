@@ -9,9 +9,11 @@
     <style>
         :root {
             --ku-crimson: #a50034;
-            --light-gray: #f4f4f4;
+            --ku-gray: #58595b;
+            --light-gray: #f8f9fa;
             --white: #ffffff;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
         }
 
         body {
@@ -20,197 +22,344 @@
             padding: 0;
             background-color: var(--light-gray);
             color: #333;
+            line-height: 1.6;
+        }
+
+        nav {
+            background-color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--ku-crimson);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--ku-gray);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--ku-crimson);
         }
 
         header {
-            background-color: var(--ku-crimson);
+            background: linear-gradient(135deg, var(--ku-crimson) 0%, #7d0027 100%);
             color: var(--white);
-            padding: 2rem 1rem;
+            padding: 4rem 1rem;
             text-align: center;
             box-shadow: var(--shadow);
         }
 
         header h1 {
             margin: 0;
-            font-size: 1.8rem;
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 1rem;
         }
 
         .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
         }
 
         .search-box {
             display: flex;
             gap: 10px;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
         }
 
         input[type="text"] {
             flex: 1;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: 12px;
             font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--ku-crimson);
         }
 
         button {
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 2rem;
             background-color: var(--ku-crimson);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
-            transition: opacity 0.2s;
+            transition: var(--transition);
         }
 
         button:hover {
-            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(165, 0, 52, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--ku-crimson);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 800;
         }
 
         .restaurant-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            gap: 2rem;
+            margin-bottom: 4rem;
         }
 
         .card {
             background: var(--white);
-            border-radius: 12px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: transform 0.2s;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
         }
 
         .card-content {
-            padding: 1.5rem;
+            padding: 2rem;
+        }
+
+        .card-category {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--ku-crimson);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
         }
 
         .card-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin: 0 0 0.5rem 0;
-            color: var(--ku-crimson);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0 0 0.8rem 0;
+            color: #1a1a1a;
         }
 
-        .card-meta {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 1rem;
+        .card-desc {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            height: 4.5em;
+            overflow: hidden;
         }
 
         .tag {
             display: inline-block;
-            background: #eee;
-            padding: 2px 8px;
-            border-radius: 4px;
+            background: #f0f0f0;
+            color: #666;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 0.8rem;
-            margin-right: 5px;
+            margin: 0 6px 6px 0;
+            font-weight: 500;
+        }
+
+        .info-section {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid { grid-template-columns: 1fr; }
+            header h1 { font-size: 2rem; }
         }
 
         footer {
+            background: #1a1a1a;
+            color: #eee;
+            padding: 4rem 2rem;
             text-align: center;
-            padding: 2rem;
-            color: #888;
+        }
+
+        .footer-links {
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            margin: 0 1rem;
             font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .policy-content {
+            font-size: 0.85rem;
+            color: #777;
+            max-width: 800px;
+            margin: 2rem auto 0;
+            text-align: left;
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border-radius: 12px;
+            display: none;
         }
     </style>
-</head>
-<body>
+    </head>
+    <body>
 
-<header>
+    <nav>
+    <a href="#" class="nav-logo">KU EATS</a>
+    <div class="nav-links">
+        <a href="#restaurants">맛집찾기</a>
+        <a href="#about">소개</a>
+        <a href="#partnership">제휴문의</a>
+        <a href="#comments">커뮤니티</a>
+    </div>
+    </nav>
+
+    <header>
     <h1>🐯 고려대 맛집 파인더</h1>
-    <p>안암 캠퍼스 주변 최고의 맛집을 찾아보세요</p>
-</header>
+    <p>안암 캠퍼스 구성원들이 직접 검증한 최고의 로컬 맛집 가이드</p>
+    </header>
 
-<div class="container">
+    <div class="container">
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="메뉴나 식당 이름을 입력하세요...">
-        <button onclick="searchRestaurants()">검색</button>
+        <input type="text" id="searchInput" placeholder="식당 이름, 메뉴, 또는 태그(#가성비)를 검색하세요...">
+        <button onclick="searchRestaurants()">맛집 찾기</button>
     </div>
 
+    <h2 id="restaurants" class="section-title">오늘 뭐 먹지? 안암 추천 맛집</h2>
     <div class="restaurant-list" id="restaurantList">
         <!-- 맛집 카드가 여기에 동적으로 추가됩니다 -->
     </div>
 
-    <section class="partnership-section" style="margin-top: 4rem; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
-        <h2 style="color: var(--ku-crimson); text-align: center;">🤝 제휴 문의</h2>
-        <p style="text-align: center; color: #666; margin-bottom: 2rem;">새로운 맛집 등록이나 제휴 제안을 기다립니다.</p>
-        
+    <div id="about" class="info-section">
+        <h2 class="section-title">서비스 소개</h2>
+        <div class="info-grid">
+            <div>
+                <h3 style="color: var(--ku-crimson);">📍 안암 로컬의 선택</h3>
+                <p>KU EATS는 고려대학교 안암 캠퍼스 주변의 식당 정보를 제공하는 비영리 가이드입니다. 광고성 블로그 리뷰가 아닌, 실제 학생들과 교직원들이 자주 찾는 검증된 장소만을 엄선합니다.</p>
+            </div>
+            <div>
+                <h3 style="color: var(--ku-crimson);">💎 고품질 정보 제공</h3>
+                <p>단순한 식당 목록을 넘어 가격대, 대표 메뉴, 분위기, 그리고 방문 팁까지 상세한 정보를 제공하여 여러분의 소중한 식사 시간을 더욱 가치 있게 만듭니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <section id="partnership" class="info-section">
+        <h2 class="section-title">🤝 제휴 및 정보 수정 문의</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 2rem;">신규 맛집 등록이나 기존 정보 수정 제안을 기다립니다. 캠퍼스 상권 활성화를 위해 노력하겠습니다.</p>
+
         <form action="https://formspree.io/f/mpqblkez" method="POST" style="max-width: 500px; margin: 0 auto;">
-            <div style="margin-bottom: 1rem;">
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">성함/업체명</label>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">성함 / 업체명</label>
                 <input type="text" name="name" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
             </div>
-            <div style="margin-bottom: 1rem;">
+            <div style="margin-bottom: 1.5rem;">
                 <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">이메일 주소</label>
                 <input type="email" name="_replyto" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
             </div>
-            <div style="margin-bottom: 1.5rem;">
-                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">문의 내용</label>
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">문의 및 제안 내용</label>
                 <textarea name="message" rows="4" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; resize: vertical;"></textarea>
             </div>
-            <button type="submit" style="width: 100%; padding: 1rem;">문의 보내기</button>
+            <button type="submit" style="width: 100%; padding: 1rem; font-size: 1rem;">소중한 의견 보내기</button>
         </form>
     </section>
 
-    <section class="comments-section" style="margin-top: 4rem; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
-        <h2 style="color: var(--ku-crimson); text-align: center; margin-bottom: 2rem;">💬 댓글</h2>
+    <section id="comments" class="info-section">
+        <h2 class="section-title">💬 자유 게시판</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 2rem;">맛집에 대한 솔직한 후기나 나만의 숨겨진 맛집을 공유해 주세요.</p>
         <div id="disqus_thread"></div>
-        <script>
-            /**
-            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-            /*
-            var disqus_config = function () {
-            this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-            this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-            };
-            */
-            (function() { // DON'T EDIT BELOW THIS LINE
-            var d = document, s = d.createElement('script');
-            s.src = 'https://productbuilder-p3mo6jut4z.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </section>
-</div>
+    </div>
 
-<footer>
-    &copy; 2024 Korea University Restaurant Guide
-</footer>
+    <footer>
+    <div class="footer-links">
+        <a href="#about">About Us</a>
+        <a href="javascript:void(0)" onclick="togglePolicy()">Privacy Policy</a>
+        <a href="#partnership">Contact</a>
+    </div>
+    <p>&copy; 2024 KU EATS - Korea University Local Food Guide</p>
+    <div id="privacyPolicy" class="policy-content">
+        <h3>개인정보처리방침 (Privacy Policy)</h3>
+        <p>1. 수집하는 개인정보: 본 사이트는 '제휴 문의' 폼을 통해 성함과 이메일 주소를 수집합니다.<br>
+        2. 수집 목적: 문의 사항에 대한 답변 및 서비스 개선을 위해 사용됩니다.<br>
+        3. 제3자 제공: 수집된 정보는 사용자 동의 없이 제3자에게 제공되지 않습니다.<br>
+        4. 쿠키 사용: 본 사이트는 Google AdSense 및 Disqus 서비스를 이용하며, 이에 따라 타사 쿠키가 사용될 수 있습니다.</p>
+    </div>
+    </footer>
 
-<script>
+    <script>
     const restaurants = [
-        { name: "영철버거", category: "패스트푸드", description: "안암의 전설, 가성비 최고의 스트리트 버거", tags: ["버거", "가성비"] },
-        { name: "고른햇살", category: "분식", description: "참치김밥이 일품인 안암 필수 코스", tags: ["김밥", "라볶이"] },
-        { name: "무르무르드구스토", category: "양식", description: "분위기 좋은 파스타와 리조또 맛집", tags: ["파스타", "데이트"] },
-        { name: "언니네함바그", category: "일식", description: "육즙 가득한 수제 함바그 스테이크", tags: ["함바그", "정식"] },
-        { name: "미뇽", category: "디저트", description: "달콤한 타르트와 커피가 맛있는 카페", tags: ["디저트", "카페"] },
-        { name: "매스플레이트", category: "양식", description: "푸짐한 양의 목살 스테이크와 필라프", tags: ["스테이크", "단체"] }
+        { name: "영철버거", category: "패스트푸드", description: "안암의 살아있는 역사. 고기 함량이 높은 스트리트 버거의 정석으로, 오랫동안 학생들의 든든한 한 끼를 책임져 온 전설적인 곳입니다.", tags: ["버거", "가성비", "역사"] },
+        { name: "고른햇살", category: "분식", description: "일반 김밥의 두 배 크기를 자랑하는 참치김밥이 시그니처입니다. 흑미밥과 가득 찬 속재료로 안암 최고의 웨이팅 맛집 중 하나입니다.", tags: ["김밥", "라볶이", "혼밥"] },
+        { name: "무르무르드구스토", category: "양식", description: "안암에서 보기 드문 세련된 분위기를 자랑합니다. 수비드 공법으로 요리한 스테이크와 창의적인 파스타 메뉴로 데이트 장소로 인기가 높습니다.", tags: ["파스타", "데이트", "스테이크"] },
+        { name: "언니네함바그", category: "일식", description: "주문 즉시 구워내는 촉촉한 수제 함바그 스테이크 전문점입니다. 정갈한 1인 정식 차림으로 나와 깔끔한 식사를 선호하는 분들께 추천합니다.", tags: ["함바그", "정식", "일본가정식"] },
+        { name: "미뇽", category: "디저트", description: "다양한 종류의 타르트와 깊은 풍미의 커피를 즐길 수 있는 안암 대표 디저트 카페입니다. 아늑한 분위기로 공부나 대화를 나누기에 최적입니다.", tags: ["디저트", "카페", "타르트"] },
+        { name: "매스플레이트", category: "양식", description: "합리적인 가격에 엄청난 양의 목살 스테이크와 필라프를 즐길 수 있습니다. 동아리 회식이나 단체 방문 시 최고의 만족도를 보장합니다.", tags: ["스테이크", "필라프", "단체회식"] },
+        { name: "유자유 김치떡볶이", category: "분식", description: "상큼한 유자주와 함께 즐기는 김치 떡볶이가 일품입니다. 안암만의 독특한 술 문화를 상징하는 곳으로 저녁 모임에 제격입니다.", tags: ["떡볶이", "유자주", "안주맛집"] },
+        { name: "형제집", category: "한식", description: "안암 오거리의 터줏대감으로 연탄불 향이 가득 밴 불고기가 대표 메뉴입니다. 저렴한 가격에 넉넉한 인심을 느낄 수 있는 노포입니다.", tags: ["불고기", "노포", "가성비"] }
     ];
 
     function displayRestaurants(items) {
         const list = document.getElementById('restaurantList');
         list.innerHTML = '';
-        
+
         items.forEach(res => {
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
                 <div class="card-content">
+                    <div class="card-category">${res.category}</div>
                     <h2 class="card-title">${res.name}</h2>
-                    <p class="card-meta">${res.category}</p>
-                    <p>${res.description}</p>
-                    <div>
+                    <p class="card-desc">${res.description}</p>
+                    <div class="tags">
                         ${res.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
                     </div>
                 </div>
@@ -224,14 +373,29 @@
         const filtered = restaurants.filter(res => 
             res.name.toLowerCase().includes(query) || 
             res.category.toLowerCase().includes(query) ||
-            res.tags.some(tag => tag.toLowerCase().includes(query))
+            res.tags.some(tag => tag.toLowerCase().includes(query)) ||
+            (query.startsWith('#') && res.tags.some(tag => tag.toLowerCase().includes(query.substring(1))))
         );
         displayRestaurants(filtered);
     }
 
+    function togglePolicy() {
+        const policy = document.getElementById('privacyPolicy');
+        policy.style.display = policy.style.display === 'block' ? 'none' : 'block';
+        if(policy.style.display === 'block') policy.scrollIntoView({ behavior: 'smooth' });
+    }
+
     // 초기 표시
     displayRestaurants(restaurants);
-</script>
+
+    // Disqus
+    (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://productbuilder-p3mo6jut4z.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    </script>
 
 </body>
 </html>
