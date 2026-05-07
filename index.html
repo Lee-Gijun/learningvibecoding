@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로또 번호 추첨기</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --surface: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.14);
+      --accent: #ffca28;
+      --accent-strong: #ffd54f;
+      --text: #f7f7f7;
+      --muted: #cfd8dc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: 'Apple SD Gothic Neo', 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, rgba(255, 202, 40, 0.14), transparent 24%),
+                  linear-gradient(180deg, #0f1720 0%, #111827 100%);
+      color: var(--text);
+    }
+
+    .container {
+      width: min(860px, 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: rgba(10, 16, 28, 0.92);
+      backdrop-filter: blur(18px);
+      padding: 32px;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    header {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.04em;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .controls input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .controls button {
+      padding: 14px 22px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ffca28, #f9a825);
+      color: #111;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .controls button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 30px rgba(255, 202, 40, 0.18);
+    }
+
+    .result-area {
+      display: grid;
+      gap: 16px;
+    }
+
+    .result-card {
+      padding: 20px 22px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--surface);
+      display: grid;
+      gap: 16px;
+    }
+
+    .result-card .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .numbers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .chip {
+      width: 56px;
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #111;
+      background: #f9a825;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .chip.bonus {
+      background: #82b1ff;
+      color: #0a1220;
+    }
+
+    .no-results {
+      padding: 28px 22px;
+      border-radius: 18px;
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .footer {
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 0.94rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 620px) {
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .chip {
+        width: 48px;
+        height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div>
+        <h1>로또 번호 추첨기</h1>
+        <p>자동으로 6개 로또 번호와 보너스 번호를 뽑아줍니다. 원하는 개수만큼 세트도 생성해 보세요.</p>
+      </div>
+    </header>
+
+    <section class="controls">
+      <input id="setCount" type="number" min="1" max="10" value="1" aria-label="생성할 번호 세트 개수" />
+      <button id="drawButton" type="button">번호 추첨</button>
+    </section>
+
+    <section class="result-area" id="results">
+      <div class="no-results">추첨 버튼을 눌러 로또 번호를 확인하세요.</div>
+    </section>
+
+    <div class="footer">
+      <span>숫자 범위: 1 ~ 45 / 6개 기본 번호 + 보너스 1개</span>
+      <span>최대 10세트까지 생성 가능합니다.</span>
+    </div>
+  </main>
+
+  <script>
+    const drawButton = document.getElementById('drawButton');
+    const results = document.getElementById('results');
+    const setCountInput = document.getElementById('setCount');
+
+    function getLottoNumbers() {
+      const numbers = Array.from({ length: 45 }, (_, i) => i + 1);
+      const shuffled = [];
+
+      while (numbers.length) {
+        const randomIndex = Math.floor(Math.random() * numbers.length);
+        shuffled.push(numbers.splice(randomIndex, 1)[0]);
+      }
+
+      const mainNumbers = shuffled.slice(0, 6).sort((a, b) => a - b);
+      const bonus = shuffled[6];
+
+      return { mainNumbers, bonus };
+    }
+
+    function renderLottoCard(index, lotto) {
+      const card = document.createElement('article');
+      card.className = 'result-card';
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = `<strong>세트 ${index + 1}</strong><span>추첨 시간: ${new Date().toLocaleTimeString()}</span>`;
+
+      const numbers = document.createElement('div');
+      numbers.className = 'numbers';
+
+      lotto.mainNumbers.forEach(num => {
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.textContent = num;
+        numbers.appendChild(chip);
+      });
+
+      const bonusChip = document.createElement('span');
+      bonusChip.className = 'chip bonus';
+      bonusChip.textContent = `+ ${lotto.bonus}`;
+      numbers.appendChild(bonusChip);
+
+      card.appendChild(meta);
+      card.appendChild(numbers);
+      return card;
+    }
+
+    function drawLotto() {
+      const count = Number(setCountInput.value) || 1;
+      const clampedCount = Math.min(Math.max(count, 1), 10);
+      setCountInput.value = clampedCount;
+      results.innerHTML = '';
+
+      for (let i = 0; i < clampedCount; i += 1) {
+        const lotto = getLottoNumbers();
+        const card = renderLottoCard(i, lotto);
+        results.appendChild(card);
+      }
+    }
+
+    drawButton.addEventListener('click', drawLotto);
+    setCountInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        drawLotto();
+      }
+    });
+  </script>
+</body>
+</html>

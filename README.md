@@ -1,2 +1,0 @@
-# learningvibecoding
-It's mine
