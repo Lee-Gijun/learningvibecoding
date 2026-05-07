@@ -136,6 +136,27 @@
     <div class="restaurant-list" id="restaurantList">
         <!-- 맛집 카드가 여기에 동적으로 추가됩니다 -->
     </div>
+
+    <section class="partnership-section" style="margin-top: 4rem; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
+        <h2 style="color: var(--ku-crimson); text-align: center;">🤝 제휴 문의</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 2rem;">새로운 맛집 등록이나 제휴 제안을 기다립니다.</p>
+        
+        <form action="https://formspree.io/f/mpqblkez" method="POST" style="max-width: 500px; margin: 0 auto;">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">성함/업체명</label>
+                <input type="text" name="name" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">이메일 주소</label>
+                <input type="email" name="_replyto" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">문의 내용</label>
+                <textarea name="message" rows="4" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; resize: vertical;"></textarea>
+            </div>
+            <button type="submit" style="width: 100%; padding: 1rem;">문의 보내기</button>
+        </form>
+    </section>
 </div>
 
 <footer>
